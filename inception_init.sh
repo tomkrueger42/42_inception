@@ -6,20 +6,21 @@
 
 # add user to sudo group
 usermod -aG sudo $LOGNAME
+groupadd docker
+usermod -aG docker $LOGNAME
 
 # update package manager
 apt-get update
 apt-get install update
 
-# install shh to connect from host machine
-apt-get install ssh
-
-# install required packages for docker
-apt-get install \
+# install packages
+apt-get -y install \
+    ssh \
     ca-certificates \
     curl \
     gnupg \
-    lsb-release
+    lsb-release \
+    make
 
 # create docker repository
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker-archive-keyring.gpg
