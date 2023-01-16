@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# switch user to root
+# su to root
 # copy this script to /
 # run this script
 
