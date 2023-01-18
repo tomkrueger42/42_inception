@@ -1,9 +1,12 @@
-MARIADB_IMG	=	srcs-mariadb
+MARIADB		=	mariadb
 
 start:
-	docker compose -f ./srcs/docker-compose.yml up
+	docker-compose -f ./srcs/docker-compose.yml up --remove-orphans
 
-rm-mariadb:
-	docker image rm -f $(MARIADB_IMG)
+clean:
+	docker rm -f $(MARIADB)
 
-re: rm-mariadb start
+fclean: clean
+	docker image rm -f srcs-$(MARIADB)
+
+re: fclean start

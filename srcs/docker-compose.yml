@@ -9,15 +9,18 @@ services:
   #     - mariadb
 
   mariadb:
-    build:
-      context: ./requirements/mariadb/
-      # image: MariaDB
-      dockerfile: Dockerfile
-    env_file: .env # should mariadb parameters be included here or in requirements/mariadb/conf/ ?
+    build: requirements/mariadb
+    container_name: mariadb
     ports:
       - 3306:3306
     volumes:
       - db_data:/var/lib/mysql
+    env_file: .env # should mariadb parameters be included here or in requirements/mariadb/conf/ ?
 
 volumes:
   db_data:
+    driver: local
+    driver_opts:
+      o: 'bind'
+      type: 'none'
+      device: '/var/lib/mysql/inception_data'
