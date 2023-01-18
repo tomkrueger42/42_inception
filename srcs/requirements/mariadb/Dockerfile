@@ -7,10 +7,12 @@ RUN apk update && apk upgrade
 RUN apk add --no-cache mariadb mariadb-client
 
 COPY conf/mariadb_config.cnf /etc/mysql/my.cnf
-COPY entrypoint.sh ./
-
-EXPOSE 3306
+COPY tools/entrypoint.sh ./
 
 RUN chmod +x ./entrypoint.sh
 
+EXPOSE 3306
+
 ENTRYPOINT ["sh", "./entrypoint.sh"]
+
+# CMD ["exec", "/usr/bin/mysqld",  "--user=mysql", "--console"]

@@ -1,7 +1,7 @@
 MARIADB		=	mariadb
 
 start:
-	docker-compose -f ./srcs/docker-compose.yml up --remove-orphans
+	docker compose -f ./srcs/docker-compose.yml up --remove-orphans
 
 clean:
 	docker rm -f $(MARIADB)

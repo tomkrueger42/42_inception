@@ -15,7 +15,10 @@ services:
       - 3306:3306
     volumes:
       - db_data:/var/lib/mysql
-    env_file: .env # should mariadb parameters be included here or in requirements/mariadb/conf/ ?
+    networks:
+      - inception_backend
+    env_file:
+      - .env # should mariadb parameters be included here or in requirements/mariadb/conf/ ?
 
 volumes:
   db_data:
@@ -24,3 +27,6 @@ volumes:
       o: 'bind'
       type: 'none'
       device: '/var/lib/mysql/inception_data'
+
+networks:
+  inception_backend:
