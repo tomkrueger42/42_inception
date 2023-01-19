@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# reference
-# https://geekdudes.wordpress.com/2020/07/16/linux-bash-script-for-creating-and-configuring-maria-database/
-
 echo "entrypoint: Configiring mariaDB..."
 
 if [ ! -d "/run/mysqld" ]; then

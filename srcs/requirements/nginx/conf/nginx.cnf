@@ -1,0 +1,9 @@
+server {
+    listen      80;
+    servername  tkruger.42.fr www.tkruger.42.fr;
+
+    location / {
+        root    /usr/share/nginx/html;
+        index   index.html index.htm index;
+    }
+}
