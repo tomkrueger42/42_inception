@@ -1,12 +1,13 @@
 version: '3.9'
 
 services:
-  # nginx:
-  #   build:
-  #     context: ./requirements/nginx/
-  #     dockerfile: Dockerfile
-  #   depends on:
-  #     - mariadb
+  nginx:
+    build: requirements/nginx
+    container_name: nginx
+    depends_on:
+      - mariadb # depends_on can be done with a health check
+    ports:
+      - 8080:80
 
   mariadb:
     build: requirements/mariadb
@@ -18,15 +19,15 @@ services:
     networks:
       - inception_backend
     env_file:
-      - .env # should mariadb parameters be included here or in requirements/mariadb/conf/ ?
+      - .env
 
 volumes:
   db_data:
-    driver: local
+    driver: 'local'
     driver_opts:
       o: 'bind'
       type: 'none'
-      device: '/var/lib/mysql/inception_data'
+      device: '~/data/mysql'
 
 networks:
   inception_backend:
