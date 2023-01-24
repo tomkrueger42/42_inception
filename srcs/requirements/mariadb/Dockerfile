@@ -11,8 +11,4 @@ COPY tools/entrypoint.sh ./
 
 RUN chmod +x ./entrypoint.sh
 
-EXPOSE 3306
-
 ENTRYPOINT ["sh", "./entrypoint.sh"]
-
-# CMD ["exec", "/usr/bin/mysqld",  "--user=mysql", "--console"]
