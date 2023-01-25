@@ -1,15 +1,18 @@
 server {
     listen 80 default_server;
-    server_name www.example.com;
+    server_name tkruger.42.fr;
     return 301 https://$server_name$request_uri;
 }
 
 server {
     listen 443 ssl;
-    server_name www.example.com;
+    server_name tkruger.42.fr;
 
-    ssl_certificate /etc/nginx/ssl/example.crt;
-    ssl_certificate_key /etc/nginx/ssl/example.key;
+    ssl_certificate /etc/nginx/ssl/certificate.pem;
+    ssl_certificate_key /etc/nginx/ssl/key.pem;
+
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
 
     location / {
         root /usr/share/nginx/html;

@@ -28,7 +28,7 @@ volumes:
     driver_opts:
       o: 'bind'
       type: 'none'
-      device: '~/data/mysql'
+      device: '/home/tkruger/data/mysql'
 
 networks:
   inception_backend:

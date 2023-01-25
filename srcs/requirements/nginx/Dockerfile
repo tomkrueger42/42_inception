@@ -4,10 +4,18 @@ RUN apk update && apk upgrade
 
 RUN apk add --no-cache nginx openssl
 
-RUN mkdir /etc/nginx/ssl &&
-    chmod 700 /etc/nginx/ssl &&
-    openssl req -×509 - nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/example.key -out /etc/ng inx/ssl/example.crt
-    
+ARG SSLDIR=/etc/nginx/ssl
+ARG DOMAIN=tkruger.42.fr
+
+RUN \
+    # prepping openssl
+    mkdir $SSLDIR && \
+    chmod 700 $SSLDIR && \
+    # creating new private key and certificate
+    openssl req -newkey rsa:2048 -nodes -keyout $SSLDIR/key.pem -x509 -days 365 -out $SSLDIR/certificate.pem \
+    # information for the temporary CSR that is being created
+    -subj "/C=DE/ST=BW/L=Heilbronn/O=42Heilbronn gGmbH/OU=Core/CN=$DOMAIN"
+
 COPY conf/nginx.cnf /etc/nginx/conf.d/default.conf
 
 CMD ["nginx", "-g", "daemon off;"]
