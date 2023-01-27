@@ -7,8 +7,18 @@ services:
     depends_on:
       - mariadb # depends_on can be done with a health check
     ports:
-      - "80:80"
       - "443:443"
+
+  wordpress:
+    build: requirements/wordpress
+    container_name: wordpress
+    expose:
+      - "9000"
+      - "3306"
+    volumes:
+      - wp_data:/var/lib/wordpress
+    networks:
+      - inception_backend
 
   mariadb:
     build: requirements/mariadb
@@ -29,6 +39,12 @@ volumes:
       o: 'bind'
       type: 'none'
       device: '/home/tkruger/data/mysql'
+  wp_data:
+    driver: 'local'
+    driver_opts:
+      o: 'bind'
+      type: 'none'
+      device: '/home/tkruger/data/wordpress'
 
 networks:
   inception_backend:

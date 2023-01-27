@@ -9,13 +9,20 @@ ARG DOMAIN=tkruger.42.fr
 
 RUN \
     # prepping openssl
-    mkdir $SSLDIR && \
+    mkdir -p $SSLDIR && \
     chmod 700 $SSLDIR && \
     # creating new private key and certificate
-    openssl req -newkey rsa:2048 -nodes -keyout $SSLDIR/key.pem -x509 -days 365 -out $SSLDIR/certificate.pem \
-    # information for the temporary CSR that is being created
-    -subj "/C=DE/ST=BW/L=Heilbronn/O=42Heilbronn gGmbH/OU=Core/CN=$DOMAIN"
+    # # information for the temporary CSR that is being created
+    openssl req -newkey rsa:4096 \
+			-x509 \
+			-sha256 \
+			-days 365 \
+			-nodes \
+			-out self-signed.crt \
+			-keyout self-signed.key \
+			-subj "/C=DE/ST=BW/L=Heilbronn/O=42Heilbronn/OU=Core/CN=10.11.249.212"
 
-COPY conf/nginx.cnf /etc/nginx/conf.d/default.conf
+COPY conf/nginx.conf /etc/nginx/conf.d/
+# maybe even to /etc/nginx/sites-enabled/ ??
 
 CMD ["nginx", "-g", "daemon off;"]
