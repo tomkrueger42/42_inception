@@ -13,12 +13,12 @@ services:
     build: requirements/wordpress
     container_name: wordpress
     expose:
-      - "9000"
       - "3306"
+      - "9000"
     volumes:
-      - wp_data:/var/lib/wordpress
+      - wp_data:/var/www/html/wp-content:delegated
     networks:
-      - inception_backend
+      - inception_default
 
   mariadb:
     build: requirements/mariadb
@@ -26,25 +26,25 @@ services:
     expose:
       - "3306"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/mysql:delegated
     networks:
-      - inception_backend
+      - inception_default
     env_file:
       - .env
 
 volumes:
   db_data:
-    driver: 'local'
+    driver: local
     driver_opts:
-      o: 'bind'
-      type: 'none'
-      device: '/home/tkruger/data/mysql'
+      o: bind
+      type: none
+      device: $HOME/data/mysql
   wp_data:
-    driver: 'local'
+    driver: local
     driver_opts:
-      o: 'bind'
-      type: 'none'
-      device: '/home/tkruger/data/wordpress'
+      o: bind
+      type: none
+      device: $HOME/data/wordpress
 
 networks:
-  inception_backend:
+  inception_default:

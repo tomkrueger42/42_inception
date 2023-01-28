@@ -1,6 +1,6 @@
 FROM alpine:3.16.3
 
-RUN apk update && apk upgrade
+RUN apk update && apk --no-cache upgrade
 
 RUN apk add --no-cache nginx openssl
 
@@ -20,7 +20,7 @@ RUN \
 			-nodes \
 			-out self-signed.crt \
 			-keyout self-signed.key \
-			-subj "/C=DE/ST=BW/L=Heilbronn/O=42Heilbronn/OU=Core/CN=10.11.249.212"
+			-subj "/C=DE/ST=BW/L=Heilbronn/O=42Heilbronn/OU=Core/CN=$DOMAIN"
 
 COPY conf/nginx.conf /etc/nginx/conf.d/
 # maybe even to /etc/nginx/sites-enabled/ ??
