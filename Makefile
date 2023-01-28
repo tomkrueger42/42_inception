@@ -19,7 +19,7 @@ clean:
 fclean: 
 	docker compose -f $(DC_PATH) down --rmi all --volumes
 	rm -rf ~/data
-
+	
 re: fclean all
 
 up: all
