@@ -16,12 +16,14 @@ clean:
 	docker compose -f $(DC_PATH) down --volumes
 
 # removes containers, networks, volumes, images & data
-fclean: 
+fclean:
 	docker compose -f $(DC_PATH) down --rmi all --volumes
-	rm -rf ~/data
-	
+	sudo rm -rf ~/data
+
 re: fclean all
+
+dev: clean
+	docker rmi -f $(if $(IMG),$(IMG),all)
 
 up: all
 down: clean
-

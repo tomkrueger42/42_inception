@@ -14,13 +14,17 @@ RUN \
     # creating new private key and certificate
     # # information for the temporary CSR that is being created
     openssl req -newkey rsa:4096 \
-			-x509 \
-			-sha256 \
-			-days 365 \
-			-nodes \
-			-out self-signed.crt \
-			-keyout self-signed.key \
-			-subj "/C=DE/ST=BW/L=Heilbronn/O=42Heilbronn/OU=Core/CN=$DOMAIN"
+        -x509 \
+        -sha256 \
+        -days 365 \
+        -nodes \
+        -out self-signed.crt \
+        -keyout self-signed.key \
+        -subj "/C=DE/ST=BW/L=Heilbronn/O=42Heilbronn/OU=Core/CN=$DOMAIN"
+
+RUN mkdir -p /run/nginx/ && \
+    mkdir -p /var/www/localhost/htdocs && \
+    touch /var/www/localhost/htdocs/index.php
 
 COPY conf/nginx.conf /etc/nginx/conf.d/
 # maybe even to /etc/nginx/sites-enabled/ ??
