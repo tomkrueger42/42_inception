@@ -1,16 +1,6 @@
 version: '3.9'
 
 services:
-  nginx:
-    build: requirements/nginx
-    container_name: nginx
-    depends_on:
-      - mariadb # depends_on can be done with a health check
-    ports:
-      - "80:80"
-      - "443:443"
-
-
   mariadb:
     build: requirements/mariadb
     container_name: mariadb
@@ -22,6 +12,37 @@ services:
       - inception_network
     env_file:
       - .env
+    # restart:
+    #   - always
+
+  wordpress:
+    build: requirements/wordpress
+    container_name: wordpress
+    expose:
+      - "9000"
+    volumes:
+      - wp_content:/var/www/html
+    env_file:
+      - .env
+    networks:
+      - inception_network
+    depends_on:
+      - mariadb # depends_on can be done with a health check
+    # restart:
+    #   - "always"
+
+  nginx:
+    build: requirements/nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - inception_network
+    depends_on:
+      - mariadb # depends_on can be done with a health check
+    # restart:
+    #   - always
 
 volumes:
   db_data:
@@ -29,13 +50,13 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: $HOME/data/mysql
-  wp_data:
+      device: /Users/tomkrueger/data/mysql/data
+  wp_content:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: $HOME/data/wordpress
+      device: /Users/tomkrueger/data/wordpress/content
 
 networks:
   inception_network:
