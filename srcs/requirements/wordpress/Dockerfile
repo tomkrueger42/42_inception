@@ -1,7 +1,12 @@
 FROM alpine:3.16.3
 
-RUN apk update && apk --no-cache upgrade && \
-    apk add --no-cache php-fpm
+RUN apk update && apk upgrade && \
+    apk add --no-cache \
+    mariadb-client \
+    php7 \
+    php7-fpm \
+    php-mysqli \
+    curl
 
 RUN mkdir -p /usr/share/webapps && \
     wget -P /usr/share/webapps http://wordpress.org/latest.tar.gz && \
