@@ -5,7 +5,14 @@ RUN apt-get update -y && \
 	apt-get install -y nginx && \
 	apt-get install openssl
 
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx.key -out /etc/ssl/certs/nginx.crt -subj "/C=DE/ST=BW/L=HN/O=42 Heilbronn gGmbH/OU=Core/CN=tkruger.42.fr/emailAddress=tkruger@student.42heilbronn.de"
+RUN openssl \
+		req -x509 \
+		-nodes \
+		-days 365 \
+		-newkey rsa:2048 \
+		-keyout /etc/ssl/private/nginx.key \
+		-out /etc/ssl/certs/nginx.crt \
+		-subj "/C=DE/ST=BW/L=HN/O=42 Heilbronn gGmbH/OU=Core/CN=tkruger.42.fr"
 
 COPY conf/default.conf /etc/nginx/conf.d/nginx.conf
 

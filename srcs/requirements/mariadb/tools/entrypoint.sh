@@ -1,24 +1,26 @@
 #!/bin/bash
 
-if [ ! -d "/var/lib/mysql/wordpress_data" ]; then
-echo "before dir does not exist"
+if [ ! -d "/var/lib/mysql/$DB_NAME" ]; then
+
+echo "MariaDB entrypoint.sh: creating database '$DB_NAME'..."
 
 service mysql start
 sleep 1
 
 mysql -u root << EOF
-CREATE DATABASE wordpress_data;
+CREATE DATABASE $DB_NAME;
 CREATE USER '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS';
 GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';
 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$DB_PASS_ROOT');
 EOF
 
 service mysql stop 
-sleep 1
-echo "done dir does not exist"
+echo "MariaDB entrypoint.sh: database '$DB_NAME' created."
 
 else
-echo "before dir does exist"
+
+echo "MariaDB entrypoint.sh: database '$DB_NAME' does already exist."
+
 fi
 
 mysqld_safe
