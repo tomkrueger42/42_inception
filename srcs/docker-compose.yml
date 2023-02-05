@@ -28,21 +28,20 @@ services:
       - inception_network
     depends_on:
       - mariadb # depends_on can be done with a health check
-    # restart:
-    #   - "always"
+    restart: always
 
   nginx:
     build: requirements/nginx
     container_name: nginx
     ports:
-      - "80:80"
       - "443:443"
+    volumes:
+      - wp_content:/var/www/html
     networks:
       - inception_network
     depends_on:
       - mariadb # depends_on can be done with a health check
-    # restart:
-    #   - always
+    restart: always
 
 volumes:
   db_data:
@@ -50,13 +49,13 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: /Users/tomkrueger/data/mysql/data
+      device: $HOME/data/mysql/data
   wp_content:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: /Users/tomkrueger/data/wordpress/content
+      device: $HOME/data/wordpress/content
 
 networks:
   inception_network:
