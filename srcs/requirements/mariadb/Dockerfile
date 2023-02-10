@@ -1,29 +1,23 @@
-FROM debian:buster
+# MariaDB Dockerfile
 
-RUN apt-get update -y
-RUN apt-get upgrade -y
-RUN apt-get install -y mariadb-server
+# using alpine:3.16.3 as it is the penultimate stable version available to avoid dependancy conflicts
+FROM alpine:3.16.3
 
-COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+# updating the alpine package keeper (apk) & upgrading any preinstalled packages
+RUN apk update && apk upgrade --no-cache
 
-EXPOSE 3306
+# installing necessary tools
+#   openrc as the init system for alpine & for managing services
+#   mariadb as MySQL relational database management system
+#   mariadb-client as access tool for MySQL databases
+RUN apk add --no-cache mariadb mariadb-client openrc
 
+# copying the MySQL server configuration file to its respective directory
+COPY conf/mariadb-server.cnf /etc/my.cnf.d/
+
+# copying an entrypoint initialization shell script to the root and allowing execution
 COPY tools/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
-ENTRYPOINT /entrypoint.sh
-
-# FROM alpine:3.16.3
-
-# #RUN apk update && apk upgrade
-
-# # mariadb as mysql database
-# # mariadb-client to connect to DB server
-# RUN apk add --no-cache mariadb mariadb-client
-
-# COPY conf/mariadb.cnf /etc/mysql/my.cnf
-# COPY tools/entrypoint.sh ./
-
-# RUN chmod +x ./entrypoint.sh
-
-# ENTRYPOINT ["sh", "entrypoint.sh"]
+# running entrypoint shell script to initialize MySQL database and start MariaDB daemon
+ENTRYPOINT ["sh", "/entrypoint.sh"]

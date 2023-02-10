@@ -8,10 +8,10 @@ services:
       - "3306"
     volumes:
       - db_data:/var/lib/mysql:delegated
-    networks:
-      - backend_network
     env_file:
       - .env
+    networks:
+      - backend_network
     restart: always
 
   wordpress:
