@@ -1,6 +1,6 @@
 FROM debian:buster
 
-COPY conf/wp-config.php /
+COPY conf/wp-config.php /var/www/html/
 
 RUN apt-get update -y
 RUN apt-get install -y  php7.3 php-mysqli php-fpm mariadb-client wget
@@ -25,13 +25,18 @@ ENTRYPOINT ./entrypoint.sh
 #     php7 \
 #     php7-fpm \
 #     php-mysqli \
-#     curl
+#     mariadb-client
 
-# RUN mkdir -p /usr/share/webapps && \
-#     wget -P /usr/share/webapps http://wordpress.org/latest.tar.gz && \
-#     tar -xzvf /usr/share/webapps/latest.tar.gz && \
-#     rm /usr/share/webapps/latest.tar.gz && \
-#     chown -R root:root wordpress && \
-#     mkdir -p /var/www/ && \
-#     ln -s wordpress/ /var/www/
+# RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+# RUN chmod +x wp-cli.phar
+# RUN mv wp-cli.phar /usr/local/bin/wp
 
+# COPY conf/wp-config.php /var/www/html/
+# COPY conf/wp-config.php /var/www/html/
+# COPY conf/www.conf /etc/php8/php-fpm.d
+
+# EXPOSE 9000
+# COPY tools/entrypoint.sh /
+# RUN chmod +x entrypoint.sh
+
+# ENTRYPOINT [ "sh", "entrypoint.sh" ]
