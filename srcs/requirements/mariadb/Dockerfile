@@ -3,14 +3,21 @@
 # using alpine:3.16.3 as it is the penultimate stable version available to avoid dependancy conflicts
 FROM alpine:3.16.3
 
-# updating the alpine package keeper (apk) & upgrading any preinstalled packages
-RUN apk update && apk upgrade --no-cache
-
-# installing necessary tools
+# updating the alpine package keeper (apk) indexes
+# upgrading any preinstalled packages
+# adding necessary packages
 #   openrc as the init system for alpine & for managing services
 #   mariadb as MySQL relational database management system
 #   mariadb-client as access tool for MySQL databases
-RUN apk add --no-cache mariadb mariadb-client openrc
+RUN apk update \
+    && apk --no-cache upgrade \
+    && apk --no-cache add mariadb mariadb-client openrc
+
+# does it also work without mariadb-client???
+# does it also work without mariadb-client???
+# does it also work without mariadb-client???
+# does it also work without mariadb-client???
+# does it also work without mariadb-client???
 
 # copying the MySQL server configuration file to its respective directory
 COPY conf/mariadb-server.cnf /etc/my.cnf.d/

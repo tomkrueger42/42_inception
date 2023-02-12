@@ -3,13 +3,14 @@
 # using alpine:3.16.3 as it is the penultimate stable version available to avoid dependancy conflicts
 FROM alpine:3.16.3
 
-# updating the alpine package keeper (apk) & upgrading any preinstalled packages
-RUN apk update && apk upgrade --no-cache
-
-# installing necessary tools
+# updating the alpine package keeper (apk) indexes
+# upgrading any preinstalled packages
+# adding necessary packages
 #	nginx as the webserver & reverse proxy
 #	openssl for creating ssl certificate
-RUN apk add --no-cache nginx openssl
+RUN apk update \
+	&& apk --no-cache upgrade \
+	apk --no-cache add nginx openssl
 
 # creating the ssl private key and certificate with openssl req
 # openssl req:		certificate request and certificate generating utility

@@ -3,6 +3,7 @@ version: '3.9'
 services:
   mariadb:
     build: requirements/mariadb
+    image: mariadb
     container_name: mariadb
     expose:
       - "3306"
@@ -11,11 +12,12 @@ services:
     env_file:
       - .env
     networks:
-      - backend_network
-    restart: always
+      - backend
+    restart: unless-stopped
 
   wordpress:
     build: requirements/wordpress
+    image: wordpress
     container_name: wordpress
     expose:
       - "9000"
@@ -24,23 +26,24 @@ services:
     env_file:
       - .env
     networks:
-      - backend_network
+      - backend
     depends_on:
       - mariadb # depends_on can be done with a health check
-    restart: always
+    restart: unless-stopped
 
   nginx:
     build: requirements/nginx
+    image: nginx
     container_name: nginx
     ports:
       - "443:443"
     volumes:
       - wp_content:/var/www/html:delegated
     networks:
-      - backend_network
+      - backend
     depends_on:
-      - mariadb # depends_on can be done with a health check
-    restart: always
+      - wordpress # depends_on can be done with a health check
+    restart: unless-stopped
 
 volumes:
   db_data:
@@ -48,13 +51,13 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: $HOME/data/mysql/data
+      device: $HOME/data/mysql_data
   wp_content:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: $HOME/data/wordpress/content
+      device: $HOME/data/wordpress_content
 
 networks:
-  backend_network:
+  backend:

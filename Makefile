@@ -1,4 +1,15 @@
+# INCEPTION Makefile
+
+# general variables
 DC_PATH		=	./srcs/docker-compose.yml
+
+# colors
+GREEN		=	\033[1;34m
+NC			=	\033[0m
+
+# Rules
+
+.PHONY: all prep build clean fclean re dev check up down
 
 all: prep build
 	docker compose -f $(DC_PATH) up
@@ -6,10 +17,8 @@ all: prep build
 # creates directories for databases
 prep:
 	mkdir -p ~/data
-	mkdir -p ~/data/mysql
-	mkdir -p ~/data/mysql/data
-	mkdir -p ~/data/wordpress
-	mkdir -p ~/data/wordpress/content
+	mkdir -p ~/data/mysql_data
+	mkdir -p ~/data/wordpress_content
 
 build:
 	docker compose -f $(DC_PATH) build
@@ -31,7 +40,14 @@ dev: clean
 
 # lists all containers, networks, volumes & images
 check:
-	bash docker_check.sh
+	@echo "$(GREEN)Docker Containers:$(NC)"
+	@docker ps -a
+	@echo "\n$(GREEN)Docker Networks:$(NC)"
+	@docker network ls
+	@echo "\n$(GREEN)Docker Volumes:$(NC)"
+	@docker volume ls
+	@echo "\n$(GREEN)Docker Images:$(NC)"
+	@docker images
 
 up: all
 down: clean

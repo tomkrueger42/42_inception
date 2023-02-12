@@ -16,15 +16,15 @@ if [ ! -d "/var/lib/mysql/$DB_NAME" ]; then
     #   first, dropping possible anonymous users for unambigous connecting
     #   second, creating new database with name specified in environment
     #   third, creating new user with name and password specified in environment
-    #   fourth, granting the new user privileges to the new database
+    #   fourth, granting the new user privileges to the new database including ability to grant privileges to other users at given privilege level
     #   fifth, locking the root user to password specified in environment
     #   sixth, flushing for the privileges to take effect
     mysql -u root << EOF
 DROP USER IF EXISTS ''@'%';
 DROP USER IF EXISTS ''@'localhost';
-CREATE DATABASE $DB_NAME;
+CREATE DATABASE IF NOT EXISTS $DB_NAME;
 CREATE USER '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS';
-GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';
+GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%' WITH GRANT OPTION;
 ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_ROOT_PASS';
 FLUSH PRIVILEGES;
 EOF
