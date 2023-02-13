@@ -1,13 +1,17 @@
 #!/bin/bash
 
 # INSTRUCTIONS: 
-# su to root
-# run script
+# run script with: 'sudo bash inception_init.sh'
+
+# if this script fails, just try running it again! It usually works on the second try at the latest
 
 # add user to sudo group
-usermod -aG sudo $LOGNAME
+/sbin/usermod -aG sudo $USER
 groupadd docker
-usermod -aG docker $LOGNAME
+/sbin/usermod -aG docker $USER
+
+# flush user groups
+su $USER
 
 # update package index and packages
 apt-get update
@@ -22,6 +26,9 @@ apt-get -y install \
     lsb-release \
     make \
 
+
+# Docker
+
 # create docker repository
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker-archive-keyring.gpg
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
@@ -29,11 +36,26 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(
 # install docker services
 apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
+
+# Inception configuration
+
+# get inception website URL
+BLUE='\033[1;34m'
+NC='\033[0m'
+echo -e -n "\n${BLUE}Enter inception URL (leave empty for https://tkruger.42.fr):${NC} https://"
+read GET_DOMAIN
+if [ "${GET_DOMAIN}" = "" ]; then
+    export INCEPTION_DOMAIN="tkruger.42.fr"
+else
+    export INCEPTION_DOMAIN="${GET_DOMAIN}"
+fi
+
 # add Domain to /etc/hosts for local DNS
-cat << "EOF" >> /etc/hosts
-# added to access tkruger.42.fr
-127.0.0.1 tkruger.42.fr
+cat << EOF >> /etc/hosts
+# added to access inception URL
+127.0.0.1 ${INCEPTION_DOMAIN}
 EOF
+
 
 # cleanup
 apt-get autoremove

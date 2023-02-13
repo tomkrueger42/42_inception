@@ -6,15 +6,20 @@ ENV_FILE=./srcs/.env
 BLUE='\033[1;34m'
 NC='\033[0m'
 
-if [ ! -d ${ENV_FILE} ]; then
+if [ ! -f ${ENV_FILE} ]; then
 
 # General
-echo -e "${BLUE}General setup${NC}"
+echo -e "\n${BLUE}General setup${NC}"
 echo -e "# General\n" > ${ENV_FILE}
 
-echo -n "Insert domain:                   https://"
+echo -n "Domain (leave empty for https://tkruger.42.fr): https://"
 read DOMAIN
-echo -e "URL=https://${DOMAIN}\n" >> ${ENV_FILE}
+if [ "${DOMAIN}" = "" ]; then
+    echo -e "URL=https://tkruger.42.fr\n" >> ${ENV_FILE}
+else
+    echo -e "URL=https://${INCEPTION_DOMAIN}\n" >> ${ENV_FILE}
+fi
+
 
 # Docker
 echo -e "# Docker\n" >> ${ENV_FILE}
