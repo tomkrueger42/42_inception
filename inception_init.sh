@@ -2,7 +2,6 @@
 
 # INSTRUCTIONS: 
 # su to root
-# copy script to /
 # run script
 
 # add user to sudo group
