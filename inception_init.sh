@@ -1,17 +1,18 @@
 #!/bin/bash
 
+# INSTRUCTIONS: 
 # su to root
-# copy this script to /
-# run this script
+# copy script to /
+# run script
 
 # add user to sudo group
 usermod -aG sudo $LOGNAME
 groupadd docker
 usermod -aG docker $LOGNAME
 
-# update package manager
+# update package index and packages
 apt-get update
-apt-get install update
+apt-get upgrade
 
 # install packages
 apt-get -y install \
@@ -21,7 +22,6 @@ apt-get -y install \
     gnupg \
     lsb-release \
     make \
-    nano
 
 # create docker repository
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker-archive-keyring.gpg

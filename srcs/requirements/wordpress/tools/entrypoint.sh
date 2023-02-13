@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # sleeping until MariaDB Container is up and running
-sleep 3 # or health check
+sleep 5
 
 # installing and initializing WordPress core files with admin credentials
 wp core install --url=$URL --title=$WP_TITLE \

@@ -9,9 +9,9 @@ NC			=	\033[0m
 
 # Rules
 
-.PHONY: all prep build clean fclean re dev check up down
+.PHONY: all prep env-file build clean fclean re dev check up down
 
-all: prep build
+all: prep env-file build
 	docker compose -f $(DC_PATH) up
 
 # creates directories for databases
@@ -19,6 +19,9 @@ prep:
 	mkdir -p ~/data
 	mkdir -p ~/data/mysql_data
 	mkdir -p ~/data/wordpress_content
+
+env-file:
+	bash env_setup.sh
 
 build:
 	docker compose -f $(DC_PATH) build
