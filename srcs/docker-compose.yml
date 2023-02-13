@@ -22,13 +22,13 @@ services:
     expose:
       - "9000"
     volumes:
-      - wp_content:/var/www/html:delegated
+      - wp_content:/var/www/wordpress:delegated
     env_file:
       - .env
     networks:
       - backend
     depends_on:
-      - mariadb # depends_on can be done with a health check
+      - mariadb # health check would be nice
     restart: unless-stopped
 
   nginx:
@@ -38,11 +38,11 @@ services:
     ports:
       - "443:443"
     volumes:
-      - wp_content:/var/www/html:delegated
+      - wp_content:/var/www/wordpress:delegated
     networks:
       - backend
     depends_on:
-      - wordpress # depends_on can be done with a health check
+      - wordpress # health check would be nice
     restart: unless-stopped
 
 volumes:

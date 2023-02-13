@@ -4,7 +4,7 @@
 DC_PATH		=	./srcs/docker-compose.yml
 
 # colors
-GREEN		=	\033[1;34m
+BLUE		=	\033[1;34m
 NC			=	\033[0m
 
 # Rules
@@ -39,15 +39,16 @@ dev: clean
 	docker rmi -f $(if $(IMG),$(IMG),all)
 
 # lists all containers, networks, volumes & images
+.ONESHELL:
 check:
-	@echo "$(GREEN)Docker Containers:$(NC)"
+	@echo "$(BLUE)Docker Containers:$(NC)"
 	@docker ps -a
-	@echo "\n$(GREEN)Docker Networks:$(NC)"
+	@echo "\n$(BLUE)Docker Networks:$(NC)"
 	@docker network ls
-	@echo "\n$(GREEN)Docker Volumes:$(NC)"
+	@echo "\n$(BLUE)Docker Volumes:$(NC)"
 	@docker volume ls
-	@echo "\n$(GREEN)Docker Images:$(NC)"
-	@docker images
+	@echo "\n$(BLUE)Docker Images:$(NC)"
+	@docker images;
 
 up: all
 down: clean

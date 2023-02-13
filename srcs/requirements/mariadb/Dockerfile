@@ -11,20 +11,19 @@ FROM alpine:3.16.3
 #   mariadb-client as access tool for MySQL databases
 RUN apk update \
     && apk --no-cache upgrade \
-    && apk --no-cache add mariadb mariadb-client openrc
+    && apk --no-cache add \
+        openrc \
+        mariadb \
+        mariadb-client
 
-# does it also work without mariadb-client???
-# does it also work without mariadb-client???
-# does it also work without mariadb-client???
-# does it also work without mariadb-client???
-# does it also work without mariadb-client???
-
-# copying the MySQL server configuration file to its respective directory
+# copying the MySQL server configuration file
 COPY conf/mariadb-server.cnf /etc/my.cnf.d/
 
 # copying an entrypoint initialization shell script to the root and allowing execution
-COPY tools/entrypoint.sh /
-RUN chmod +x /entrypoint.sh
+COPY tools/entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# HEALTHCHECK --interval=5s --timeout=3s --retries=3 CMD mysql -u root
 
 # running entrypoint shell script to initialize MySQL database and start MariaDB daemon
-ENTRYPOINT ["sh", "/entrypoint.sh"]
+ENTRYPOINT ["sh", "/usr/local/bin/entrypoint.sh"]
