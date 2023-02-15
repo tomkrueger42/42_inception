@@ -6,80 +6,87 @@ ENV_FILE=./srcs/.env
 BLUE='\033[1;34m'
 NC='\033[0m'
 
+function write_to_env_file ()
+{
+    echo -e "$1" >> ${ENV_FILE}
+}
+
+function get_input ()
+{
+    INPUT=""
+    while [ "${INPUT}" = "" ];
+    do
+        echo -n -e "$2: "
+        read INPUT
+    done
+    write_to_env_file "$1=${INPUT}"
+}
+
+function get_input_with_suggestion ()
+{
+    echo -n -e "$2 (leave empty for $3): $4"
+    read INPUT
+    if [ "${INPUT}" = "" ]; then
+        write_to_env_file "$1=$3"
+    else
+        write_to_env_file "$1=$4${INPUT}"
+    fi
+}
+
 if [ ! -f ${ENV_FILE} ]; then
 
-# General
-echo -e "\n${BLUE}General setup${NC}"
-echo -e "# General\n" > ${ENV_FILE}
 
-echo -n "Domain (leave empty for https://tkruger.42.fr): https://"
-read DOMAIN
-if [ "${DOMAIN}" = "" ]; then
-    echo -e "URL=https://tkruger.42.fr\n" >> ${ENV_FILE}
-else
-    echo -e "URL=https://${INCEPTION_DOMAIN}\n" >> ${ENV_FILE}
-fi
+    # General
+
+    echo -e "\n${BLUE}General setup${NC}"
+    write_to_env_file "# General\n"
+
+    get_input_with_suggestion "URL" "Domain" "https://localhost" "https://"
 
 
-# Docker
-echo -e "# Docker\n" >> ${ENV_FILE}
-echo -e "COMPOSE_PROJECT_NAME=inception\n" >> ${ENV_FILE}
+    # Docker
 
-# MySQL
-echo -e "\n${BLUE}MySQL credentials${NC}"
-echo -e "# MySQL\n" >> ${ENV_FILE}
+    write_to_env_file "\n# Docker\n"
+    write_to_env_file "COMPOSE_PROJECT_NAME=inception"
 
-echo "DB_HOST=mariadb" >> ${ENV_FILE}
 
-echo -n "Insert database name:            "
-read DB_NAME
-echo "DB_NAME=${DB_NAME}" >> ${ENV_FILE}
+    # MySQL
 
-echo -n "Insert database user:            "
-read DB_USER
-echo "DB_USER=${DB_USER}" >> ${ENV_FILE}
+    echo -e "\n${BLUE}MySQL credentials${NC}"
 
-echo -n "Insert database password:        "
-read DB_PASS
-echo "DB_PASS=${DB_PASS}" >> ${ENV_FILE}
+    write_to_env_file "\n# MySQL\n"
 
-echo -e -n "\nInsert database root password:   "
-read DB_ROOT_PASS
-echo -e "DB_ROOT_PASS=${DB_ROOT_PASS}\n" >> ${ENV_FILE}
+    write_to_env_file "DB_HOST=mariadb"
 
-# WordPress
-echo -e "\n${BLUE}WordPress credentials${NC}"
-echo -e "# WordPress\n" >> ${ENV_FILE}
+    get_input_with_suggestion "DB_NAME" "Database name" "inception_db"
 
-echo -n "Insert WordPress username:       "
-read WP_USER_NAME
-echo "WP_USER_NAME=${WP_USER_NAME}" >> ${ENV_FILE}
+    get_input "DB_USER" "Database user"
+    get_input "DB_PASS" "Database password"
 
-echo -n "Insert WordPress user email:     "
-read WP_USER_MAIL
-echo "WP_USER_MAIL=${WP_USER_MAIL}" >> ${ENV_FILE}
+    echo ""
+    get_input "DB_ROOT_PASS" "Database root password"
 
-echo -n "Insert WordPress user password:  "
-read WP_USER_PASS
-echo -e "WP_USER_PASS=${WP_USER_PASS}\n" >> ${ENV_FILE}
 
-echo -e -n "\nInsert WordPress admin name:     "
-read WP_ADMIN_NAME
-echo "WP_ADMIN_NAME=${WP_ADMIN_NAME}" >> ${ENV_FILE}
+    # WordPress
 
-echo -n "Insert WordPress admin email:    "
-read WP_ADMIN_MAIL
-echo "WP_ADMIN_MAIL=${WP_ADMIN_MAIL}" >> ${ENV_FILE}
+    echo -e "\n${BLUE}WordPress credentials${NC}"
+    
+    write_to_env_file "\n# WordPress\n"
 
-echo -n "Insert WordPress admin password: "
-read WP_ADMIN_PASS
-echo -e "WP_ADMIN_PASS=${WP_ADMIN_PASS}\n" >> ${ENV_FILE}
+    get_input "WP_USER_NAME" "WordPress username"
+    get_input "WP_USER_MAIL" "WordPress user email"
+    get_input "WP_USER_PASS" "WordPress user password"
 
-echo -e -n "\nInsert WordPress title:          "
-read WP_TITLE
-echo -e "WP_TITLE=${WP_TITLE}" >> ${ENV_FILE}
+    echo ""
+    get_input "WP_ADMIN_NAME" "WordPress admin name"
+    get_input "WP_ADMIN_MAIL" "WordPress admin email"
+    get_input "WP_ADMIN_PASS" "WordPress admin password"
 
-# Done
-echo -e "\n${BLUE}Done!${NC}"
+    echo ""
+    get_input_with_suggestion "\nWP_TITLE" "WordPress title" "Inception"
+
+
+    # Done
+    echo -e "\n${BLUE}Done!${NC}"
 
 fi
